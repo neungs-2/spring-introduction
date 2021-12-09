@@ -98,6 +98,7 @@ test {
 - Controller를 생성 후 템플릿을 추가하면 라우터처럼 동작
 - Controller의 리턴해주는 이름과 템플릿명을 일치시켜야 동작
 - 아래의 경우 http://localhost:8080/hello 에서 동작
+- 단 경로는 템플릿명이 아닌 `@GetMapping('경로명')`에 나타난 이름대로 실행
 
 ![image](https://user-images.githubusercontent.com/60606025/145355318-b7417641-11ac-4910-bcf7-352380a267d4.png)
 
@@ -137,3 +138,77 @@ test {
 <br>
 
 ## **스프링 웹 개발 기초**
+
+- 정적 컨텐츠
+  - 서버에서 별도의 조작 없이 그대로 웹브라우저에게 전달하는 방식
+- MVC와 템플릿 엔진
+  - JSP, PHP와 같은 템플릿 엔진으로 서버에서 HTML을 동적으로 조작하여 브라우저에게 전달하는 방식
+  - Model, View, Controller를 MVC라고 함
+- API
+  - HTML 등 파일 자체가 아니라 JSON 형태로 전달
+  - 데이터만 내려주면 클라이언트가 화면을 그리거나 서버끼리 통신할 때 사용
+
+<br>
+
+### **정적 컨텐츠**
+
+- `resource/static` 디렉토리에 파일 생성후 `localhost:8080/파일명.확장자`를 브라우저에 입력시 파일을 볼 수 있음
+- 어떤 프로그래밍은 되지 않고 그대로 전달됨
+- 우선 서버가 받으면 컨트롤러가 우선순위를 갖고 관련 컨트롤러를 찾음
+- 컨트롤러 없을 시 정적파일을 찾음
+
+<br>
+
+**정적 컨텐츠 작동**
+![image](https://user-images.githubusercontent.com/60606025/145364887-c31e0def-7e63-4cbd-821a-544a125bd6f4.png)
+
+<br>
+
+### **MVC와 템플릿 엔진**
+- MVC: Model, View, Controller
+- Model: 사용자가 편집하길 원하는 모든 데이터를 담음
+- View: 화면과 관련된 코드
+- Controller: 서버 단이나 비즈니스 로직과 관련된 코드
+
+
+***controller***
+```java
+@Controller
+public class HelloController {
+
+  @GetMapping("hello-mvc")
+  public String helloMvc(@RequestParam(value= "name") String name, Model model) 
+  {
+    model.addAttribute("name", name);
+    return "hello-template";
+  }
+}
+```
+
+<br>
+
+***view***<br>
+[resources/template/hello-template.html]
+```html
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p th:text="'hello ' + ${name}">hello! empty</p>
+</body>
+</html>
+```
+
+- 실행은 다음과 같이 Mapping한 경로를 추가하고 뒤에 파라미터(쿼리스트링) 추가
+  - http://localhost:8080/hello-mvc?name="Smith"
+
+<br>
+
+**MVC, 템플릿 엔진 작동**
+![image](https://user-images.githubusercontent.com/60606025/145366589-cf73c27c-0df3-492a-85b0-00c4b86d5c47.png)
+
+<br>
+
+### **API**
+
+<br>
+<br>
+<br>
