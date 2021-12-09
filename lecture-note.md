@@ -229,5 +229,7 @@ public class HelloController {
   - 기본 객체처리: `MappingJackson2HttpMessageConverter`
   - byte 처리 등등 기타 여러 HttpMessageConverter가 기본으로 등록되어 있음
 
+---
+
 <br>
 <br>
