@@ -165,19 +165,20 @@ test {
 <br>
 
 ### **MVC와 템플릿 엔진**
+
 - MVC: Model, View, Controller
 - Model: 사용자가 편집하길 원하는 모든 데이터를 담음
 - View: 화면과 관련된 코드
 - Controller: 서버 단이나 비즈니스 로직과 관련된 코드
 
+**_controller_**
 
-***controller***
 ```java
 @Controller
 public class HelloController {
 
   @GetMapping("hello-mvc")
-  public String helloMvc(@RequestParam(value= "name") String name, Model model) 
+  public String helloMvc(@RequestParam(value= "name") String name, Model model)
   {
     model.addAttribute("name", name);
     return "hello-template";
@@ -187,13 +188,14 @@ public class HelloController {
 
 <br>
 
-***view***<br>
+**_view_**<br>
 [resources/template/hello-template.html]
+
 ```html
 <html xmlns:th="http://www.thymeleaf.org">
-<body>
-<p th:text="'hello ' + ${name}">hello! empty</p>
-</body>
+  <body>
+    <p th:text="'hello ' + ${name}">hello! empty</p>
+  </body>
 </html>
 ```
 
@@ -209,6 +211,23 @@ public class HelloController {
 
 ### **API**
 
+- API 방식은 데이터 그 자체를 넘겨줌 (보통 JSON 사용)
+  - MVC는 View단에서 템플릿 엔진을 통해 조작, 렌더링된 데이터를 브라우저에 넘겨줌
+- `@ResponseBody`를 사용
+  - HTTP의 Body에 데이터를 직접 넘겨줄 때 사용
+  - `@ResponseBody` 를 사용하면 `viewResolver`를 사용하지 않음
+
 <br>
+
+**API 방식 작동 원리**
+![image](https://user-images.githubusercontent.com/60606025/145418341-719afefe-9f6f-44e7-8465-ef0cb1b4c3ef.png)
+
+- `@ResponseBody` 를 사용
+  - HTTP의 BODY에 문자 내용을 직접 반환
+  - `viewResolver` 대신에 `HttpMessageConverter` 가 동작
+  - 기본 문자처리: `StringHttpMessageConverter`
+  - 기본 객체처리: `MappingJackson2HttpMessageConverter`
+  - byte 처리 등등 기타 여러 HttpMessageConverter가 기본으로 등록되어 있음
+
 <br>
 <br>
