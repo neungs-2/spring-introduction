@@ -388,6 +388,7 @@ public class MemberController {
     - `@Controller`
     - `@Service`
     - `@Repository`
+- 자동 등록은 같은 패키지(hello.hellospring) 내부에서만 해줌
 
 <br>
 
