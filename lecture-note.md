@@ -307,4 +307,115 @@ public class HelloController {
 - 테스트 코드 짤 때 **_given, when, then_** 주석을 달고 어떤 것이 주어졌을 때 언제 어떤 결과가 나와야 하는지를 나눠서 코드짜는 것 추천
 
 <br>
+
+**_진행상황_**
+
+- 지금까지 Member 객체와 Service, Repository 생성
+- 서비스를 통해 맴버를 가입, Repository에 저장하고 불러오기
+- test 코드
+
+---
+
+<br>
+
+## **스프링 빈과 의존관계**
+
+- 스프링 빈을 등록하는 2가지 방법
+  - 컴포넌트 스캔과 자동 의존관계 설정
+  - 자바 코드로 직접 스프링 빈 등록하기
+
+<br>
+
+### **컴포넌트 스캔과 자동 의존관계 설정**
+
+<br>
+
+**_진행계획_**
+
+- 화면 붙이기 위해서 view, controller 생성
+- controller가 service를 통해서 회원가입, 데이터 조회 등 실행
+  - controller가 service에 **의존**한다. (의존관계)
+
+<br>
+
+**_Controller 만들기 (자동 의존관계 설정)_**
+
+- Controller 어노테이션으로 생성 시 스프링이 컨트롤러 객체를 컨테이너에 저장하고 관리
+- 이때 new 로 생성하면 다른 컨트롤러에서도 공유가 되기 때문에 아래 코드처럼 하기
+
+```java
+// 다음과 같이 생성자로 생성하면 MemberController 이외의 다른 컨트롤러들도 접근할 수 있기 때문에 스프링에 등록된 것을 가져다 써야 함
+@Controller
+public class MemberController {
+    private final MemberService memberService = new MemberService()
+}
+
+// 위의 코드를 아래와 같이 생성자와 @Autowired를 이용한 코드로 수정
+// 자동 의존관계 설정
+@Controller
+public class MemberController {
+    private final MemberService memberService;
+
+    @Autowired
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+  }
+}
+```
+
+- 생성자에 `@Autowired` 가 있으면 스프링이 연관된 객체를 스프링 컨테이너에서 찾아서 넣어줌
+- 객체 의존관계를 외부에서 넣어주는 것: DI (Dependency Injection), 의존성 주입
+- 이전 테스트에서는 개발자가 직접 주입
+- 여기서는 `@Autowired`에 의해 스프링이 주입해줌
+
+> [참고]<br>생성자에 `@Autowired`를 사용하면 객체 생성 시점에 스프링 컨테이너에서 해당 스프링 빈을 찾아서 주입 <br> 생성자가 1개만 있으면 `@Autowired`는 생략 가능
+
+<br>
+
+- 실행 시 오류발생
+  - `Consider defining a bean of type 'hello.hellospring.service.MemberService' in your configuration`
+- memberService가 **_스프링 빈_**으로 등록되어 있지 않기 때문
+- 이전에 만든 클래스에 어노테이션 추가 --> 스프링 빈에 등록됨
+  - MemberService에는 `@Service`
+  - MemberRepository에는 `@Repository`
+
+<br>
+
+- **컴포넌트 스캔 원리**
+  - `@Component` 애노테이션이 있으면 스프링 빈으로 자동 등록
+  - `@Controller` 컨트롤러가 스프링 빈으로 자동 등록된 이유도 컴포넌트 스캔 때문
+  - `@Component` 를 포함하는 다음 애노테이션도 스프링 빈으로 자동 등록
+    - `@Controller`
+    - `@Service`
+    - `@Repository`
+
+<br>
+
+**_스프링 빈 등록 이미지_**
+![image](https://user-images.githubusercontent.com/60606025/146586498-651f5f0e-780e-4669-9cc0-81c5e1ced48a.png)
+
+- 스프링은 스프링 컨테이너에 스프링 빈을 등록할 때, 기본으로 싱글톤으로 등록(유일하게 하나만 등록해서 공유)
+- 따라서 같은 스프링 빈이면 모두 같은 인스턴스
+- 설정으로 싱글톤이 아니게 설정 가능
+- 하지만 특별한 경우를 제외하면 대부분 싱글톤을 사용
+
+<br>
+<br>
+
+### **자바 코드로 직접 스프링 빈 등록하기**
+
+<br>
+
+## 회원 관리 예제 - 웹 MVC 개발
+
+### **회원 웹 기능 - 홈화면 추가**
+
+<br>
+
+### **회원 웹 기능 - 등록**
+
+<br>
+
+### **회원 웹 기능 - 조회**
+
 <br>
